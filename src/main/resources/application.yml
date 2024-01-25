@@ -1,11 +1,12 @@
 spring:
 
-  flyway:
-    enabled: true
-    locations: classpath:db/migration
-    baseline-on-migrate: true
-    baseline-version: 0
-    placeholder-replacement: false
+  # below flyway config is done in the FlywayConfig class
+  #flyway:
+  #  enabled: true
+  #  locations: classpath:db/migration
+  #  baseline-on-migrate: true
+  #  baseline-version: 0
+  #  placeholder-replacement: false
 
   profiles:
     active: @activeProfile@

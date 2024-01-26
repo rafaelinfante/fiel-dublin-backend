@@ -1,22 +1,14 @@
 package ie.fieldublin.domain.user.service.mapper;
 
 
-import ie.fieldublin.domain.user.dto.UserRequestDto;
+import ie.fieldublin.common.mapper.EntityMapper;
 import ie.fieldublin.domain.user.dto.UserResponseDto;
 import ie.fieldublin.domain.user.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-import java.util.List;
-
-@Mapper
-public interface UserMapper {
-
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
+public interface UserMapper extends EntityMapper<UserResponseDto, User> {
     UserMapper MAPPER = Mappers.getMapper(UserMapper.class);
-
-    UserResponseDto toDto(User user);
-
-    User toEntity(UserRequestDto userDto);
-
-    List<UserResponseDto> toDtoList(List<User> users);
 }

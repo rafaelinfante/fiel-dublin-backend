@@ -7,7 +7,6 @@ import ie.fieldublin.domain.user.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,8 +16,6 @@ public class UserService {
 
     public UserResponseDto getUser(Integer id) {
         User user = userRepository.findById(id).orElse(null);
-
-        UserResponseDto userResponseDto = UserMapper.MAPPER.toDto(user);
 
         /*if (user != null) {
             return UserRequestDto.builder()
@@ -30,28 +27,12 @@ public class UserService {
                     .build();
         }*/
 
-        return userResponseDto;
+        return UserMapper.MAPPER.toDto(user);
     }
 
     public List<UserResponseDto> findAll() {
         List<User> users = userRepository.findAll();
 
-        List<UserResponseDto> usersDto = new ArrayList<>();
-
-        usersDto = UserMapper.MAPPER.toDtoList(users);
-
-        /*if (!users.isEmpty()) {
-            users.forEach(user -> {
-                usersDto.add(UserRequestDto.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .firstname(user.getFirstname())
-                        .lastname(user.getLastname())
-                        .country(user.getCountry())
-                        .build());
-            });
-        }*/
-
-        return usersDto;
+        return UserMapper.MAPPER.toDto(users);
     }
 }

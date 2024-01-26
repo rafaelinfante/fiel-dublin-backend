@@ -1,12 +1,15 @@
 package ie.fieldublin.domain.user.controller;
 
-import ie.fieldublin.domain.user.dto.UserRequestDto;
+import ie.fieldublin.domain.user.dto.UserResponseDto;
 import ie.fieldublin.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,8 +22,8 @@ public class UserController {
 
     @GetMapping(value = "{id}")
     @Operation(summary = "Get specific user")
-    public ResponseEntity<UserRequestDto> getUser(@PathVariable Integer id) {
-        UserRequestDto userDTO = userService.getUser(id);
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable Integer id) {
+        UserResponseDto userDTO = userService.getUser(id);
         if (userDTO == null) {
             return ResponseEntity.notFound().build();
         }
@@ -29,7 +32,7 @@ public class UserController {
 
     @GetMapping()
     @Operation(summary = "Get all users")
-    public ResponseEntity<List<UserRequestDto>> getAllUser() {
+    public ResponseEntity<List<UserResponseDto>> getAllUser() {
         return ResponseEntity.ok(userService.findAll());
     }
 }

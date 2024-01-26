@@ -1,8 +1,9 @@
 package ie.fieldublin.domain.user.service;
 
-import ie.fieldublin.domain.user.dto.UserRequestDto;
-import ie.fieldublin.domain.user.repository.UserRepository;
+import ie.fieldublin.domain.user.dto.UserResponseDto;
 import ie.fieldublin.domain.user.entity.User;
+import ie.fieldublin.domain.user.repository.UserRepository;
+import ie.fieldublin.domain.user.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,12 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    public UserRequestDto getUser(Integer id) {
+    public UserResponseDto getUser(Integer id) {
         User user = userRepository.findById(id).orElse(null);
 
-        if (user != null) {
+        UserResponseDto userResponseDto = UserMapper.MAPPER.toDto(user);
+
+        /*if (user != null) {
             return UserRequestDto.builder()
                     .id(user.getId())
                     .username(user.getUsername())
@@ -25,15 +28,19 @@ public class UserService {
                     .lastname(user.getLastname())
                     .country(user.getCountry())
                     .build();
-        }
-        return null;
+        }*/
+
+        return userResponseDto;
     }
 
-    public List<UserRequestDto> findAll() {
+    public List<UserResponseDto> findAll() {
         List<User> users = userRepository.findAll();
 
-        List<UserRequestDto> usersDto = new ArrayList<>();
-        if (!users.isEmpty()) {
+        List<UserResponseDto> usersDto = new ArrayList<>();
+
+        usersDto = UserMapper.MAPPER.toDtoList(users);
+
+        /*if (!users.isEmpty()) {
             users.forEach(user -> {
                 usersDto.add(UserRequestDto.builder()
                         .id(user.getId())
@@ -43,7 +50,8 @@ public class UserService {
                         .country(user.getCountry())
                         .build());
             });
-        }
+        }*/
+
         return usersDto;
     }
 }

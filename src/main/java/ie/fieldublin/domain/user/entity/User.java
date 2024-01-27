@@ -1,26 +1,27 @@
 package ie.fieldublin.domain.user.entity;
 
+import ie.fieldublin.domain.role.entity.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
-@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @Column(nullable = false)
     String username;
 
-    @Column(nullable = false)
     String lastname;
 
     String firstname;
@@ -29,9 +30,15 @@ public class User {
 
     String country;
 
-    @NotNull(message = "Date created must not be empty")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
     private LocalDateTime dateCreated;
 
-    @NotNull(message = "Date edited must not be empty")
     private LocalDateTime dateEdited;
 }

@@ -1,6 +1,12 @@
 package ie.fieldublin.domain.user.dto;
 
-import lombok.*;
+import ie.fieldublin.domain.role.dto.RoleDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Set;
 
 @Setter
 @Getter
@@ -12,4 +18,5 @@ public class UserResponseDto {
     String firstname;
     String lastname;
     String country;
+    Set<RoleDto> roles;
 }

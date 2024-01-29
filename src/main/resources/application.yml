@@ -4,15 +4,20 @@ spring:
     active: @activeProfile@
 
   jpa:
-      open-in-view: false
-      hibernate:
-        ddl-auto: update
-      show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
-  # below flyway config is done in the FlywayConfig class
-  #flyway:
-  #  enabled: true
-  #  locations: classpath:db/migration
-  #  baseline-on-migrate: true
-  #  baseline-version: 0
-  #  placeholder-replacement: false
+jwt:
+  secret: 8yA6YVhB9Qo1GScKqf8ua103DW05ZUe84USsGSeVxjwgbC6j8Oajj25klNtoQNGq
+  expiration: 3_600_000
+  prefix: "Bearer "
+
+# below flyway config is done in the FlywayConfig class
+#flyway:
+#  enabled: true
+#  locations: classpath:db/migration
+#  baseline-on-migrate: true
+#  baseline-version: 0
+#  placeholder-replacement: false

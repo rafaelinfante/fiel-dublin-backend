@@ -1,4 +1,4 @@
-package ie.fieldublin.config.security;
+package ie.fieldublin.security;
 
 import ie.fieldublin.domain.user.entity.User;
 import ie.fieldublin.domain.user.repository.UserRepository;

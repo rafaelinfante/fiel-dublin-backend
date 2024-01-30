@@ -1,7 +1,8 @@
-package ie.fieldublin.config.security.filter;
+package ie.fieldublin.security.jwt;
 
-import ie.fieldublin.config.security.MyUserDetails;
-import ie.fieldublin.config.security.service.JWTService;
+import ie.fieldublin.common.exception.AuthenticateException;
+import ie.fieldublin.security.MyUserDetails;
+import ie.fieldublin.security.constants.SecurityConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     protected final void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         String jwtToken = req.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (jwtToken == null || !jwtToken.startsWith(jwtService.getPrefix())) {
+        if (jwtToken == null || !jwtToken.startsWith(SecurityConstants.JWT_PREFIX)) {
             chain.doFilter(req, res);
             return;
         }
@@ -45,14 +46,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(String jwtToken) {
         try {
 
-            String username = jwtService.extractUsername(jwtToken);
+            String username = jwtService.extractUsername(jwtToken.replace(SecurityConstants.JWT_PREFIX, ""));
 
             MyUserDetails myUserDetails = (MyUserDetails) userDetailsService.loadUserByUsername(username);
             return new UsernamePasswordAuthenticationToken(myUserDetails, null, myUserDetails.getAuthorities());
 
         } catch (Exception e) {
-            //throw new AuthenticateException(e.getMessage());
-            throw e;
+            throw new AuthenticateException(e.getMessage());
         }
     }
 }

@@ -1,7 +1,8 @@
 package ie.fieldublin.domain.auth.service;
 
-import ie.fieldublin.config.security.dto.UserCredentials;
-import ie.fieldublin.config.security.service.JWTService;
+import ie.fieldublin.security.MyUserDetails;
+import ie.fieldublin.security.dto.UserCredentials;
+import ie.fieldublin.security.jwt.JWTService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,8 +19,9 @@ public class AuthService {
     private final JWTService jwtService;
 
     public String login(UserCredentials userCredentials) {
+        MyUserDetails userDetails;
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userCredentials.username(), userCredentials.password()));
+            userDetails = (MyUserDetails) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userCredentials.username(), userCredentials.password()));
         } catch (Exception ex) {
             log.error("login::failure", ex);
             throw ex;
@@ -27,7 +29,7 @@ public class AuthService {
 
         log.info("login::success");
 
-        return jwtService.generateToken(userCredentials.username());
+        return jwtService.generateToken(userDetails);
     }
 
 }

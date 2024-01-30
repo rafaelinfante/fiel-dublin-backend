@@ -1,9 +1,9 @@
-package ie.fieldublin.config.security;
+package ie.fieldublin.security;
 
-import ie.fieldublin.config.security.filter.ExceptionHandlerFilter;
-import ie.fieldublin.config.security.filter.JWTAuthenticationFilter;
-import ie.fieldublin.config.security.filter.JWTAuthorizationFilter;
-import ie.fieldublin.config.security.service.JWTService;
+import ie.fieldublin.security.filter.ExceptionHandlerFilter;
+import ie.fieldublin.security.jwt.JWTAuthenticationFilter;
+import ie.fieldublin.security.jwt.JWTAuthorizationFilter;
+import ie.fieldublin.security.jwt.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +18,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -26,6 +32,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private static final List<String> URLS_WHITE_LIST = List.of("http://localhost:4200");
 
     private final JWTService jwtService;
 
@@ -42,6 +50,9 @@ public class SecurityConfig {
                         //.requestMatchers("/api/user/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated())
 
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(withDefaults())
+
                 .httpBasic(withDefaults())
 
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -50,9 +61,6 @@ public class SecurityConfig {
                 .addFilterBefore(exceptionHandlerFilter(), JWTAuthenticationFilter.class)
                 .addFilter(jwtAuthenticationFilter())
                 .addFilter(jwtAuthorizationFilter())
-
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
 
                 .logout(l -> l.clearAuthentication(true));
 
@@ -88,5 +96,18 @@ public class SecurityConfig {
 
     private JWTAuthorizationFilter jwtAuthorizationFilter() {
         return new JWTAuthorizationFilter(authenticationManager(), jwtService, userDetailsService());
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(URLS_WHITE_LIST);
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS", "HEAD"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }

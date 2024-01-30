@@ -8,11 +8,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
-jwt:
-  secret: 8yA6YVhB9Qo1GScKqf8ua103DW05ZUe84USsGSeVxjwgbC6j8Oajj25klNtoQNGq
-  expiration: 3_600_000
-  prefix: "Bearer "
+  
+#jwt:
+#  secret: 8yA6YVhB9Qo1GScKqf8ua103DW05ZUe84USsGSeVxjwgbC6j8Oajj25klNtoQNGq
+#  expiration: 3_600_000
+#  prefix: "Bearer "
 
 # below flyway config is done in the FlywayConfig class
 #flyway:

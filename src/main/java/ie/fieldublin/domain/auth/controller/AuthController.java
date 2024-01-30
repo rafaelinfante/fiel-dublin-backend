@@ -1,7 +1,7 @@
 package ie.fieldublin.domain.auth.controller;
 
-import ie.fieldublin.config.security.dto.UserCredentials;
 import ie.fieldublin.domain.auth.service.AuthService;
+import ie.fieldublin.security.dto.UserCredentials;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

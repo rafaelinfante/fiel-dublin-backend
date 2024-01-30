@@ -1,12 +1,13 @@
-package ie.fieldublin.config.security.filter;
+package ie.fieldublin.security.jwt;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.fieldublin.config.security.MyUserDetails;
-import ie.fieldublin.config.security.constants.SecurityConstants;
-import ie.fieldublin.config.security.dto.UserCredentials;
-import ie.fieldublin.config.security.service.JWTService;
+import ie.fieldublin.common.exception.AuthenticateException;
+import ie.fieldublin.common.exception.BadRequestException;
+import ie.fieldublin.security.MyUserDetails;
+import ie.fieldublin.security.constants.SecurityConstants;
+import ie.fieldublin.security.dto.UserCredentials;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +41,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    public final Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+    public final Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {
         if (!req.getMethod().equals(HttpMethod.POST.name())) {
             throw new MethodNotAllowedException(req.getMethod(), Collections.singleton(HttpMethod.POST));
         }
@@ -54,9 +55,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.username(), credentials.password()));
         } catch (JsonMappingException | JsonParseException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new BadRequestException(e.getMessage(), e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AuthenticateException(e);
         }
     }
 
@@ -72,9 +73,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         MyUserDetails userDetails = (MyUserDetails) auth.getPrincipal();
 
-        String jwtToken = jwtService.generateToken(userDetails.getUsername());
+        String jwtToken = jwtService.generateToken(userDetails);
 
         res.addHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.AUTHORIZATION);
-        res.addHeader(HttpHeaders.AUTHORIZATION, jwtToken);
+        res.addHeader(HttpHeaders.AUTHORIZATION, SecurityConstants.JWT_PREFIX + jwtToken);
     }
 }

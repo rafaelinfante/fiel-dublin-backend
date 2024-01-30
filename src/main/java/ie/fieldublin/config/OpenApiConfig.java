@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         name = "Licence name",
                         url = "https://licenceurl"
                 ),
-                termsOfService = "Terms of service",
+                termsOfService = "Terms of jwt",
                 contact = @Contact(
                         email = "matos.rafael@gmail.com",
                         name = "Rafael Infante",

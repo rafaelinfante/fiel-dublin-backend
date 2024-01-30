@@ -1,4 +1,4 @@
-package ie.fieldublin.config.security;
+package ie.fieldublin.security;
 
 import ie.fieldublin.domain.role.entity.Role;
 import ie.fieldublin.domain.user.entity.User;
@@ -21,12 +21,9 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roles = user.getRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
 
         return authorities;
     }
@@ -60,5 +57,9 @@ public class MyUserDetails implements UserDetails {
     public boolean isEnabled() {
         //return user.isEnabled();
         return true;
+    }
+
+    public Set<Role> getRoles() {
+        return user.getRoles();
     }
 }

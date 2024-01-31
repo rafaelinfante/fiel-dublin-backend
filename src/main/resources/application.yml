@@ -8,7 +8,18 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: Iv1.731596c579d3b990
+            clientSecret: 1a16900f622b3b74d6d2e1efa40c53a63ad8705d
+          google:
+            clientId: 331382163239-t0vtnmud1bscaf2p2e5fhfhgtfib3fh4.apps.googleusercontent.com
+            clientSecret: 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
+
 #jwt:
 #  secret: 8yA6YVhB9Qo1GScKqf8ua103DW05ZUe84USsGSeVxjwgbC6j8Oajj25klNtoQNGq
 #  expiration: 3_600_000

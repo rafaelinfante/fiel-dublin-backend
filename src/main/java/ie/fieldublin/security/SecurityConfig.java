@@ -45,13 +45,14 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",
-                                "/auth/**")
+                                "/auth/**",
+                                "/oauth2/**")
                         .permitAll()
                         //.requestMatchers("/api/user/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated())
 
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(withDefaults())
+                .cors(AbstractHttpConfigurer::disable)
 
                 .httpBasic(withDefaults())
 
@@ -61,6 +62,8 @@ public class SecurityConfig {
                 .addFilterBefore(exceptionHandlerFilter(), JWTAuthenticationFilter.class)
                 .addFilter(jwtAuthenticationFilter())
                 .addFilter(jwtAuthorizationFilter())
+
+                .oauth2Login(withDefaults())
 
                 .logout(l -> l.clearAuthentication(true));
 
@@ -110,4 +113,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
 }

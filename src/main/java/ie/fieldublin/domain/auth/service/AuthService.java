@@ -1,6 +1,7 @@
 package ie.fieldublin.domain.auth.service;
 
 import ie.fieldublin.security.MyUserDetails;
+import ie.fieldublin.security.constants.SecurityConstants;
 import ie.fieldublin.security.dto.UserCredentials;
 import ie.fieldublin.security.jwt.JWTService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class AuthService {
 
         log.info("login::success");
 
-        return jwtService.generateToken(userDetails);
+        return SecurityConstants.JWT_PREFIX + jwtService.generateToken(userDetails.getUsername());
     }
 
 }

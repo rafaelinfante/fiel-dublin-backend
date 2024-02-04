@@ -30,6 +30,12 @@ public class UserService {
         return UserMapper.MAPPER.toDto(user);
     }
 
+    public UserResponseDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+
+        return UserMapper.MAPPER.toDto(user);
+    }
+
     public List<UserResponseDto> findAll() {
         List<User> users = userRepository.findAll();
 

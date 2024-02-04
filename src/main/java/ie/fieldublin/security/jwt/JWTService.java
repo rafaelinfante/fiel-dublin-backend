@@ -1,8 +1,6 @@
 package ie.fieldublin.security.jwt;
 
-import ie.fieldublin.security.MyUserDetails;
 import ie.fieldublin.security.constants.SecurityConstants;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -22,18 +20,31 @@ public class JWTService {
         @Getter
         private String prefix;
     */
-    public String generateToken(MyUserDetails userDetails) {
-        Claims claims = Jwts.claims()
-                .subject(userDetails.getUsername())
+    public String generateToken(String username) {
+
+        return Jwts.builder()
+                .claims()
+                .subject(username)
                 .expiration(new Date(System.currentTimeMillis() + SecurityConstants.JWT_EXPIRATION_TIME))
                 .issuedAt(new Date())
-                .add("roles", userDetails.getRoles())
+                .and()
+                .signWith(getKey())
+                .compact();
+
+
+                /* If role is needed in the token receive the list in the method (Set<Role> roles) and set as below
+        Claims claims = Jwts.claims()
+                .subject(username)
+                .expiration(new Date(System.currentTimeMillis() + SecurityConstants.JWT_EXPIRATION_TIME))
+                .issuedAt(new Date())
+                .add("roles", roles)
                 .build();
 
         return Jwts.builder()
                 .claims(claims)
                 .signWith(getKey())
                 .compact();
+*/
     }
 
     public String extractUsername(String token) {
